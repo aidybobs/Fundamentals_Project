@@ -1,0 +1,26 @@
+<html>
+<center><h2> Shift Editing </h2></center>
+<br>
+<br>
+<br>
+<table>
+    <tr bgcolor="Red">
+        <td>Shift No.</td>
+        <td>Date</td>
+        <td>No. of Employees</td>
+        <td>Type</td>
+        <td>Hours</td>
+        <td>Employees</td>
+    </tr>
+    {% for record in records %}
+        <tr>
+            <td>{{record.shift_no}}</td>
+            <td>{{record.date}}</td>
+            <td>{{record.no_emps}}</td>
+            <td>{{record.type}}</td>
+            <td>{{record.hours}}</td>
+            <td>{{record.emps}}</td>
+        </tr>
+    {% endfor %}
+</table>
+</html>
