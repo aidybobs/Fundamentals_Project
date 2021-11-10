@@ -1,3 +1,26 @@
 <html>
-
+<center><h2> Employee Editing </h2></center>
+<br>
+<br>
+<br>
+<table>
+    <tr bgcolor="Red">
+        <td>Employee No.</td>
+        <td>Name</td>
+        <td>Department</td>
+        <td>Pay Rate</td>
+        <td>Hours</td>
+        <td>Shifts</td>
+    </tr>
+    {% for record in records %}
+        <tr>
+            <td>{{record.emp_no}}</td>
+            <td>{{record.name}}</td>
+            <td>{{record.dept}}</td>
+            <td>{{record.rate}}</td>
+            <td>{{record.hours}}</td>
+            <td>{{record.shifts}}</td>
+        </tr>
+    {% endfor %}
+</table>
 </html>

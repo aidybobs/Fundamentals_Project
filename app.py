@@ -47,5 +47,10 @@ def homepage():
     return render_template("homepage.html", records=rotas)
 
 
+@app.route("/employees")
+def employees():
+    employee = Employees.query.all()
+    return render_template("employees.html", records = employee)
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
