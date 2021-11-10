@@ -28,7 +28,7 @@ class Employees(db.Model):
     dept = db.Column(db.String(20), nullable=False)
     rate = db.Column(db.Integer, nullable=False)
     hours = db.Column(db.Integer, nullable=False)
-    shifts = db.relationship('Shift', secondary=Rota, backref='shiftbr')
+    shifts = db.relationship('Rota', backref='shiftbr')
 
 
 class Shifts(db.Model):
@@ -38,7 +38,13 @@ class Shifts(db.Model):
     no_emps = db.Column(db.Integer, nullable=False)
     type = db.Column(db.String(10), nullable=False)
     hours = db.Column(db.Integer, nullable=False)
-    emps = db.relationship('Employee', secondary=Rota, backref='empbr')
+    emps = db.relationship('Rota', backref='empbr')
+
+
+@app.route("/")
+def homepage():
+    rotas = Rota.query.all()
+    return render_template("homepage.html", records=rotas)
 
 
 if __name__ == "__main__":

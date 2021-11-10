@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
+<html>
+<center><h2>Rota Creation System</h2></center>
+<br>
+<br>
+<br>
+<table>
+    <tr bgcolor="Red">
+        <td>ID</td>
+        <td>Employee No.</td>
+        <td>Shift No.</td>
+    </tr>
+    {% for record in records %}
+        <tr>
+            <td>{{record.id}}</td>
+            <td>{{record.emp_no}}</td>
+            <td>{{record.shift_no}}</td>
+        </tr>
+    {% endfor %}
+</table>
 </html>
