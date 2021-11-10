@@ -11,6 +11,7 @@
         <td>Pay Rate</td>
         <td>Hours</td>
         <td>Shifts</td>
+        <td>Edit/Delete</td>
     </tr>
     {% for record in records %}
         <tr>
@@ -20,6 +21,10 @@
             <td>{{record.rate}}</td>
             <td>{{record.hours}}</td>
             <td>{{record.shifts}}</td>
+            <td>
+                <a href="http://localhost:5000/editrecord/{{record.emp_no}}">Edit</a>
+                <a href="http://localhost:5000/removerecord/{{record.emp_no}}">Delete</a>
+            </td>
         </tr>
     {% endfor %}
 </table>
