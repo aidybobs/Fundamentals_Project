@@ -50,7 +50,14 @@ def homepage():
 @app.route("/employees")
 def employees():
     employee = Employees.query.all()
-    return render_template("employees.html", records = employee)
+    return render_template("employees.html", records=employee)
+
+
+@app.route("/shifts")
+def shifts():
+    shift = Shifts.query.all()
+    return render_template("shifts.html", records=shift)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
