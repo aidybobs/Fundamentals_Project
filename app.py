@@ -106,6 +106,14 @@ def addemp():
     return render_template("editemp.html", form=form)
 
 
+@app.route("/deleteemployee", methods=["GET", "POST"])
+def delemp(emp_no):
+    emp = Employees.query.filter_by(emp_no=emp_no).first()
+    db.session.delete(emp)
+    db.session.commit()
+    return redirect("/employees")
+
+
 @app.route("/addshift", methods=["GET","POST"])
 def addshift():
     form = ShiftForm()
@@ -134,6 +142,13 @@ def editshift():
         return redirect("/shifts")
     return render_template("editshift.html", form=form)
 
+
+@app.route("/deleteshift", methods=["GET", "POST"])
+def delshift(shift_no):
+    shift = Shifts.query.filter_by(shift_no=shift_no).first()
+    db.session.delete(shift)
+    db.session.commit()
+    return redirect("/employees")
 
 
 if __name__ == "__main__":
