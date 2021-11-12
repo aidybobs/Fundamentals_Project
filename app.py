@@ -1,6 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from os import getenv
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import IntegerField, StringField, SelectField, SubmitField, DateField
 
 
 app = Flask(__name__)
@@ -8,7 +10,6 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv("DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = getenv('secretkey')
 
 
 db = SQLAlchemy(app)
@@ -41,6 +42,22 @@ class Shifts(db.Model):
     emps = db.relationship('Rota', backref='empbr')
 
 
+class EditEmployee(FlaskForm):
+    name = StringField("Name")
+    dept = StringField("Department")
+    rate = IntegerField("Pay Rate")
+    hours = IntegerField("Hours")
+    submit = SubmitField("Submit")
+
+class EditShift(FlaskForm):
+    date = DateField("Date")
+    no_emps = IntegerField("No. of Employees")
+    type = StringField("Type")
+    hours = IntegerField("Hours")
+    submit = SubmitField("Submit")
+
+
+
 @app.route("/")
 def homepage():
     rotas = Rota.query.all()
@@ -57,6 +74,20 @@ def employees():
 def shifts():
     shift = Shifts.query.all()
     return render_template("shifts.html", records=shift)
+
+
+@app.route("/editemployee/<int:emp_no>", methods=["GET", "POST"])
+def editrecord(emp_no):
+    form = EditEmployee()
+    employee = Employees.query.filter_by(emp_no=emp_no).first()
+    if request.method =='POST':
+        employee.name = form.name.data
+        employee.dept = form.dept.data
+        employee.rate = form.rate.data
+        employee.hours = form.hours.data
+        db.session.commit()
+        return redirect("/employees")
+    return render_template("editemp.html", form=form)
 
 
 if __name__ == "__main__":
