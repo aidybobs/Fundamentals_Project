@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv("DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = getenv("SECRET_KEY")
 
 
 db = SQLAlchemy(app)
@@ -42,20 +43,20 @@ class Shifts(db.Model):
     emps = db.relationship('Rota', backref='empbr')
 
 
-class EditEmployee(FlaskForm):
+class EmpForm(FlaskForm):
     name = StringField("Name")
     dept = StringField("Department")
     rate = IntegerField("Pay Rate")
     hours = IntegerField("Hours")
     submit = SubmitField("Submit")
 
-class EditShift(FlaskForm):
+
+class ShiftForm(FlaskForm):
     date = DateField("Date")
     no_emps = IntegerField("No. of Employees")
     type = StringField("Type")
     hours = IntegerField("Hours")
     submit = SubmitField("Submit")
-
 
 
 @app.route("/")
@@ -77,10 +78,10 @@ def shifts():
 
 
 @app.route("/editemployee/<int:emp_no>", methods=["GET", "POST"])
-def editrecord(emp_no):
-    form = EditEmployee()
+def editemployee(emp_no):
+    form = EmpForm()
     employee = Employees.query.filter_by(emp_no=emp_no).first()
-    if request.method =='POST':
+    if request.method == "POST":
         employee.name = form.name.data
         employee.dept = form.dept.data
         employee.rate = form.rate.data
@@ -88,6 +89,51 @@ def editrecord(emp_no):
         db.session.commit()
         return redirect("/employees")
     return render_template("editemp.html", form=form)
+
+
+@app.route("/addemployee", methods=["GET", "POST"])
+def addemp():
+    form = EmpForm()
+    if request.method == "POST":
+        name = form.name.data
+        dept = form.dept.data
+        rate = form.rate.data
+        hours = form.hours.data
+        nemp = Employees(name=name, dept=dept, rate=rate, hours=hours)
+        db.session.add(nemp)
+        db.session.commit()
+        return redirect("/employees")
+    return render_template("editemp.html", form=form)
+
+
+@app.route("/addshift", methods=["GET","POST"])
+def addshift():
+    form = ShiftForm()
+    if request.method == "POST":
+        date = form.date.data
+        no_emps = form.no_emps.data
+        type = form.type.data
+        hours = form.hours.data
+        nshift = Shifts(date=date, no_emps=no_emps, type=type,hours=hours)
+        db.session.add(nshift)
+        db.session.commit()
+        return redirect("/shifts")
+    return render_template("editshift.html", form=form)
+
+
+@app.route("/editshift", methods=["GET", "POST"])
+def editshift():
+    form = ShiftForm()
+    shift = Shifts.query.filter_by(emp_no=emp_no).first()
+    if request.method == "POST":
+        shift.date = form.date.data
+        shift.no_emps = form.no_emps.data
+        shift.type = form.type.data
+        shift.hours = form.hours.data
+        db.session.commit()
+        return redirect("/shifts")
+    return render_template("editshift.html", form=form)
+
 
 
 if __name__ == "__main__":
