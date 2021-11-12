@@ -130,9 +130,9 @@ def addshift():
 
 
 @app.route("/editshift", methods=["GET", "POST"])
-def editshift():
+def editshift(shift_no):
     form = ShiftForm()
-    shift = Shifts.query.filter_by(emp_no=emp_no).first()
+    shift = Shifts.query.filter_by(emp_no=shift_no).first()
     if request.method == "POST":
         shift.date = form.date.data
         shift.no_emps = form.no_emps.data
