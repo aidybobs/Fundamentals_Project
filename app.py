@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect
 from os import getenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SelectField, SubmitField, DateField
+from wtforms import IntegerField, StringField, SubmitField, DateField
+from wtforms_sqlalchemy.fields import QuerySelectField
 
 
 app = Flask(__name__)
@@ -16,13 +17,6 @@ app.config['SECRET_KEY'] = getenv("SECRET_KEY")
 db = SQLAlchemy(app)
 
 
-class Rota(db.Model):
-    __tablename__ = 'Rota'
-    id = db.Column('id', db.Integer, primary_key=True)
-    emp_no = db.Column('emp_no', db.Integer, db.ForeignKey('Employees.emp_no'))
-    shift_no = db.Column('shift_no', db.Integer, db.ForeignKey('Shifts.shift_no'))
-
-
 class Employees(db.Model):
     __tablename__ = 'Employees'
     emp_no = db.Column(db.Integer, primary_key=True)
@@ -30,17 +24,23 @@ class Employees(db.Model):
     dept = db.Column(db.String(20), nullable=False)
     rate = db.Column(db.Integer, nullable=False)
     hours = db.Column(db.Integer, nullable=False)
-    shifts = db.relationship('Rota', backref='shiftbr')
+    rotas = db.relationship('Rota', backref='erota')
 
 
 class Shifts(db.Model):
-    __tablename__ = 'Shifts'
+    __tablename__='Shifts'
     shift_no = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     no_emps = db.Column(db.Integer, nullable=False)
     type = db.Column(db.String(10), nullable=False)
     hours = db.Column(db.Integer, nullable=False)
-    emps = db.relationship('Rota', backref='empbr')
+    rotas = db.relationship('Rota', backref='srota')
+
+
+class Rota(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    emp_no = db.Column('emp_no', db.Integer, db.ForeignKey('Employees.emp_no'))
+    shift_no = db.Column('shift_no', db.Integer, db.ForeignKey('Shifts.shift_no'))
 
 
 class EmpForm(FlaskForm):
@@ -57,6 +57,19 @@ class ShiftForm(FlaskForm):
     type = StringField("Type")
     hours = IntegerField("Hours")
     submit = SubmitField("Submit")
+
+
+class RotaForm(FlaskForm):
+    emp_id = QuerySelectField("Select Employee", query_factory=lambda:Employees.query.all(), get_label="emp_no")
+    shift_id = QuerySelectField("Select Shift", query_factory=lambda:Shifts.query.all(), get_label="shift_no")
+    submit = SubmitField("Submit")
+
+
+def getint(x):
+    for i in x:
+        if i.isnumeric() == True:
+            return i
+
 
 
 @app.route("/")
@@ -149,6 +162,19 @@ def delshift(shift_no):
     db.session.delete(shift)
     db.session.commit()
     return redirect("/employees")
+
+
+@app.route("/createrota", methods=["GET", "POST"])
+def createrota():
+    form = RotaForm()
+    if request.method == "POST":
+        emp_id = str(form.emp_id.data)
+        shift_id = str(form.shift_id.data)
+        nrota = Rota(emp_no=int(getint(emp_id)), shift_no=int(getint(shift_id)))
+        db.session.add(nrota)
+        db.session.commit()
+        return redirect("/")
+    return render_template("createrota.html", form=form)
 
 
 if __name__ == "__main__":
