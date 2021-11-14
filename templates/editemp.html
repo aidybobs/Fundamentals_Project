@@ -1,0 +1,16 @@
+<html>
+<div class="form">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name.label }} {{form.name}}
+        <br>
+        {{ form.dept.label }} {{ form.dept }}
+        <br>
+        {{ form.rate.label }} {{ form.rate }}
+        <br>
+        {{ form.hours.label }} {{ form.hours }}
+        <br>
+        {{ form.submit }}
+    </form>
+</div>
+</html>

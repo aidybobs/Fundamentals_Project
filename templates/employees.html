@@ -22,10 +22,12 @@
             <td>{{record.hours}}</td>
             <td>{{record.shifts}}</td>
             <td>
-                <a href="http://localhost:5000/editrecord/{{record.emp_no}}">Edit</a>
-                <a href="http://localhost:5000/removerecord/{{record.emp_no}}">Delete</a>
+                <a href="http://localhost:5000/editemployee/{{record.emp_no}}">Edit</a>
+                <a href="http://localhost:5000/removeemployee/{{record.emp_no}}">Delete</a>
             </td>
         </tr>
     {% endfor %}
 </table>
+<a href="http://localhost:5000/addemployee"> Add Employee </a>
+</div>
 </html>
