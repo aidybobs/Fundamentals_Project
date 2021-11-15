@@ -4,3 +4,6 @@ flask_wtf
 wtforms
 wtforms_sqlalchemy
 pymysql
+pytest
+pytest-cov
+

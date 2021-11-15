@@ -13,7 +13,7 @@ if [ ${create} ]; then
 fi
 
 echo 'TESTING:'
-python3 -m pytest --cov=application --cov-report html
+python3 -m pytest tests.py --cov --cov-report
 
 python3 app.py
 
