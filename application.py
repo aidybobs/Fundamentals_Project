@@ -67,7 +67,7 @@ class RotaForm(FlaskForm):
 
 def getint(x):
     for i in x:
-        if i.isnumeric() == True:
+        if i.isnumeric():
             return i
 
 
@@ -119,7 +119,7 @@ def addemp():
     return render_template("editemp.html", form=form)
 
 
-@app.route("/deleteemployee", methods=["GET", "POST"])
+@app.route("/deleteemployee/<int:emp_no>", methods=["GET", "POST"])
 def delemp(emp_no):
     emp = Employees.query.filter_by(emp_no=emp_no).first()
     db.session.delete(emp)
@@ -142,10 +142,10 @@ def addshift():
     return render_template("editshift.html", form=form)
 
 
-@app.route("/editshift", methods=["GET", "POST"])
+@app.route("/editshift<int:shift_no>", methods=["GET", "POST"])
 def editshift(shift_no):
     form = ShiftForm()
-    shift = Shifts.query.filter_by(emp_no=shift_no).first()
+    shift = Shifts.query.filter_by(shift_no=shift_no).first()
     if request.method == "POST":
         shift.date = form.date.data
         shift.no_emps = form.no_emps.data
@@ -156,12 +156,12 @@ def editshift(shift_no):
     return render_template("editshift.html", form=form)
 
 
-@app.route("/deleteshift", methods=["GET", "POST"])
+@app.route("/deleteshift<int:shift_no>", methods=["GET", "POST"])
 def delshift(shift_no):
     shift = Shifts.query.filter_by(shift_no=shift_no).first()
     db.session.delete(shift)
     db.session.commit()
-    return redirect("/employees")
+    return redirect("/shifts")
 
 
 @app.route("/createrota", methods=["GET", "POST"])
@@ -176,6 +176,4 @@ def createrota():
         return redirect("/")
     return render_template("createrota.html", form=form)
 
-
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+app.run(debug=True, host='0.0.0.0')
