@@ -22,11 +22,11 @@
             <td>{{record.hours}}</td>
             <td>{{record.shifts}}</td>
             <td>
-                <a href="http://35.234.141.67:5000/editemployee/{{record.emp_no}}">Edit</a>
-                <a href="http://35.234.141.67:5000/removeemployee/{{record.emp_no}}">Delete</a>
+                <a href="{{ url_for('editemployee', emp_no=record.emp_no) }}">Edit</a>
+                <a href="{{ url_for('delemp', emp_no=record.emp_no) }}">Delete</a>
             </td>
         </tr>
     {% endfor %}
 </table>
-<a href="http://35.234.141.67:5000/addemployee"> Add Employee </a>
+<a href="{{ url_for('addemp') }}"> Add Employee </a>
 </html>

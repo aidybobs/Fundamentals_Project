@@ -3,8 +3,8 @@
 <br>
 <br>
 <br>
-<a href="http://35.234.141.67:5000/employees"> View Employees </a>
-<a href="http://35.234.141.67:5000/shifts"> View Shifts </a>
+<a href="{{ url_for('employees') }}"> View Employees </a>
+<a href="{{ url_for('shifts') }}"> View Shifts </a>
 <table>
     <tr style="color:white; background-color:red;">
         <td>ID</td>
@@ -13,11 +13,11 @@
     </tr>
     {% for record in records %}
         <tr>
-            <td><a href="http://35.234.141.67:5000/editrecord">{{record.id}}</a></td>
+            <td>{{record.id}}</a></td>
             <td>{{record.emp_no}}</td>
             <td>{{record.shift_no}}</td>
         </tr>
     {% endfor %}
 </table>
-<a href="http://35.234.141.67:5000/createrota">Create New Rota </a>
+<a href="{{ url_for('createrota') }}">Create New Rota </a>
 </html>
