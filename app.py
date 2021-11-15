@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField, DateField
 from wtforms_sqlalchemy.fields import QuerySelectField
+import pymysql
 
 
 app = Flask(__name__)
