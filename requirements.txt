@@ -6,4 +6,7 @@ wtforms_sqlalchemy
 pymysql
 pytest
 pytest-cov
+<<<<<<< HEAD
 
+=======
+>>>>>>> 267dbaafe015f12ee5e2c846053c0d4d9ba49251
